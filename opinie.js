@@ -59,6 +59,9 @@
   function render(el, data) {
     var reviews = data.reviews.filter(function (r) { return r.rating >= 4 && r.text; });
     var cards = reviews.map(function (r) {
+      if (r.name === "A Google User") {
+        r = Object.assign({}, r, { name: "Klient Google", avatar: null });
+      }
       var avatar = r.avatar
         ? '<img src="' + esc(r.avatar) + '" alt="" loading="lazy" referrerpolicy="no-referrer">'
         : '<span class="mo-ini">' + esc(r.name.charAt(0)) + "</span>";

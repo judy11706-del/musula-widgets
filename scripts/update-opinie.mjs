@@ -28,6 +28,18 @@ const reviews = (Array.isArray(raw) ? raw : [])
     reply: r.response?.text?.trim() || null,
   }));
 
+// Requests from GitHub's US servers get some authors anonymised as "A Google User";
+// names and photos already known from earlier runs are kept.
+const ANONYMOUS = "A Google User";
+const known = new Map((previous?.reviews ?? []).map((r) => [r.id, r]));
+for (const r of reviews) {
+  const old = known.get(r.id);
+  if (r.name === ANONYMOUS && old && old.name !== ANONYMOUS) {
+    r.name = old.name;
+    r.avatar = old.avatar;
+  }
+}
+
 // Google sometimes answers with an empty or truncated list (rate limiting, layout changes).
 // Keeping the last good file means the site never goes blank.
 const previousCount = previous?.reviews?.length ?? 0;
