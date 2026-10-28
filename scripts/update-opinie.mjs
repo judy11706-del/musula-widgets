@@ -5,6 +5,17 @@ const PLACE_URL =
   "https://www.google.com/maps/place/Anna+Musu%C5%82a+Agent+Nieruchomo%C5%9Bci/@54.57,18.39,17z/data=!4m8!3m7!1s0x6af4f95efc376817:0x72dcf3d6d9266efe!8m2!3d54.57!4d18.39!9m1!1b1";
 const OUT = new URL("../data/opinie.json", import.meta.url);
 
+function cleanText(text) {
+  return (text ?? "")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 async function readPrevious() {
   try {
     return JSON.parse(await readFile(OUT, "utf8"));
@@ -23,7 +34,7 @@ const reviews = (Array.isArray(raw) ? raw : [])
     name: r.author?.name ?? "",
     avatar: r.author?.profile_url ?? null,
     rating: r.review.rating,
-    text: (r.review.text ?? "").trim(),
+    text: cleanText(r.review.text),
     date: Number(r.time?.published) || null,
     reply: r.response?.text?.trim() || null,
   }));
