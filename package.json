@@ -1,0 +1,14 @@
+{
+  "name": "musula-widgets",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Opinie Google i Instagram dla musula.pl, aktualizowane codziennie przez GitHub Actions.",
+  "scripts": {
+    "opinie": "node scripts/update-opinie.mjs",
+    "instagram": "node scripts/update-instagram.mjs"
+  },
+  "dependencies": {
+    "google-maps-review-scraper": "^3.1.0"
+  }
+}
